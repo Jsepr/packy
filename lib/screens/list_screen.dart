@@ -144,47 +144,39 @@ class _TaskListState extends State<TaskList> {
             ...(listTasks.tasks.isEmpty
                 ? [
                     SizedBox(
-                      height: MediaQuery.of(context).size.height / 2,
+                      height: MediaQuery.of(context).size.height / 4,
                       child: const Center(child: Text("Din lista är tom")),
                     )
                   ]
-                : [
-                    ...listTasks.tasks.map(
-                      (task) {
-                        return CheckboxListTile(
-                          key: Key(task.id.toString()),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          value: task.checked,
-                          checkboxShape: const CircleBorder(),
-                          onChanged: (newValue) {
-                            tasksProvider.toggleTask(
-                                widget.list, task.id!, !task.checked);
-                          },
-                          title: Text(task.task),
-                        );
-                      },
-                    ).toList(),
-                    ...(listTasks.tasks.length < 10
-                        ? List.generate(
-                            10 - listTasks.tasks.length, (index) => ListTile())
-                        : [])
-                  ]),
-            const ListTile(
-              key: Key("suggestions-title"),
+                : listTasks.tasks.map(
+                    (task) {
+                      return CheckboxListTile(
+                        key: Key(task.id.toString()),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value: task.checked,
+                        checkboxShape: const CircleBorder(),
+                        onChanged: (newValue) {
+                          tasksProvider.toggleTask(
+                              widget.list, task.id!, !task.checked);
+                        },
+                        title: Text(task.task),
+                      );
+                    },
+                  ).toList()),
+            ListTile(
               minVerticalPadding: 0,
-              title: Padding(
+              title: const Padding(
                 padding: EdgeInsets.only(top: 16),
                 child: Text(
                   "Förslag",
                   style: TextStyle(fontSize: 24, color: Colors.black87),
                 ),
               ),
+              trailing: listTasks.isLoadingSuggestions
+                  ? const CircularProgressIndicator()
+                  : null,
               subtitle: Text("AI-genererade förslag baserade på din lista"),
             ),
-            if (listTasks.isLoadingSuggestions)
-              Container(
-                  height: 50,
-                  child: Center(child: CircularProgressIndicator())),
             ...listTasks.suggestions.map(
               (suggestion) {
                 return ListTile(

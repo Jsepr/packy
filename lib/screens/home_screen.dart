@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:todo_again/components/list_item.dart';
+import 'package:todo_again/components/list_list_item.dart';
 import 'package:todo_again/components/text_input_form.dart';
 import 'package:todo_again/layouts/main_layout.dart';
 import 'package:todo_again/services/database.dart';
@@ -83,35 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-    );
-  }
-}
-
-class RemovableListItem extends StatelessWidget {
-  const RemovableListItem({
-    super.key,
-    required this.list,
-  });
-
-  final TodoList list;
-
-  @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      key: UniqueKey(),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        color: Colors.red,
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: const Icon(Icons.delete_forever),
-      ),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        child: ListItem(list: list),
-      ),
-      onDismissed: (DismissDirection direction) async =>
-          await DatabaseHelper.instance.removeList(list.id!),
     );
   }
 }

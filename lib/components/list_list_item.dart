@@ -35,3 +35,32 @@ class ListItem extends StatelessWidget {
     );
   }
 }
+
+class RemovableListItem extends StatelessWidget {
+  const RemovableListItem({
+    super.key,
+    required this.list,
+  });
+
+  final TodoList list;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: const Icon(Icons.delete_forever),
+      ),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        child: ListItem(list: list),
+      ),
+      onDismissed: (DismissDirection direction) async =>
+          await DatabaseHelper.instance.removeList(list.id!),
+    );
+  }
+}
